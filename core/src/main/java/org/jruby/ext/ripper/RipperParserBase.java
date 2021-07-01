@@ -154,6 +154,10 @@ public class RipperParserBase {
     public IRubyObject escape(IRubyObject arg) {
         return arg == null ? context.nil : arg;
     }
+
+    IRubyObject new_nil_at() {
+        return context.nil;
+    }
     
     public IRubyObject formal_argument(IRubyObject identifier) {
         return shadowing_lvar(identifier);
@@ -233,6 +237,10 @@ public class RipperParserBase {
     }
     
     public void popCurrentScope() {
+        if (!currentScope.isBlockScope()) {
+            getCmdArgumentState().pop();
+            getConditionState().pop();
+        }
         currentScope = currentScope.getEnclosingScope();
     }
     
@@ -242,7 +250,8 @@ public class RipperParserBase {
     
     public void pushLocalScope() {
         currentScope = getRuntime().getStaticScopeFactory().newLocalScope(currentScope);
-        getCmdArgumentState().reset();
+        getCmdArgumentState().push0();
+        getConditionState().push0();
     }
 
     public int getHeredocIndent() {

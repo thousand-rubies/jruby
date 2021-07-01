@@ -127,8 +127,8 @@ public class Signature {
 
     /**
      * Best attempt at breaking the code of arity values!  We figure out how many fixed/required parameters
-     * must be supplied.  Then we figure out if we need to mark the value as optional.  Optional is indicated
-     * by multiplying -1 * (fixed + 1).  Keyword args optional and rest values can indicate this optional
+     * must be supplied. Then we figure out if we need to mark the value as optional. Optional is indicated
+     * by multiplying -1 * (fixed + 1). Keyword args optional and rest values can indicate this optional
      * condition but only if no required keyword arguments are present.
      */
     public int calculateArityValue() {
@@ -145,6 +145,15 @@ public class Signature {
 
     public int arityValue() {
         return arityValue;
+    }
+
+    /**
+     * If we are yield'ing to this signature should we spread/destructure a Ruby Array?
+     *
+     * @return true if the signature expects multiple args
+     */
+    public boolean isSpreadable() {
+        return arityValue < -1 || arityValue > 1;
     }
 
 
